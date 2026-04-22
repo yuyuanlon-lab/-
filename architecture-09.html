@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-page-title="project.09.title">Architecture 09 - Yuanlong Yu</title>
+  <style>
+    :root{--page-bg:#ffffff;--text:#6f6f6b;--line:#8a867f;--max-width:1296px;}
+    *{box-sizing:border-box;}
+    body{margin:0;min-height:100vh;color:var(--text);font-family:"DIN Alternate","DIN","Bahnschrift","Helvetica Neue",Arial,sans-serif;background:var(--page-bg);}
+    a{color:inherit;text-decoration:none;}
+    img,video{display:block;width:100%;}
+    .page-shell{width:min(100%,var(--max-width));margin:0 auto;padding:18px 24px 40px;}
+    .site-header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:10px 0 14px;border-bottom:1px solid var(--line);color:var(--text);}
+    .brand-lockup{font-size:1rem;font-weight:700;letter-spacing:.02em;}
+    .site-nav{display:flex;align-items:center;gap:34px;flex-wrap:wrap;}
+    .nav-link{font-size:1rem;font-weight:700;}
+    main{padding-top:54px;}
+    .detail-block{width:min(100%,1000px);margin:0 auto 120px;}
+    .detail-image{width:100%;aspect-ratio:1.35/0.9;overflow:hidden;background:#e9dfd0;}
+    .detail-image img,.detail-image iframe{width:100%;height:100%;object-fit:cover;border:0;display:block;}
+    .detail-layout{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);column-gap:96px;align-items:end;margin-top:22px;color:#111;}
+    .detail-left{text-align:center;}
+    .detail-meta{margin:0 0 10px;font-size:1.7rem;font-weight:700;line-height:1.2;color:#111;}
+    .detail-title{margin:0;font-size:1.7rem;font-weight:700;line-height:1.2;}
+    .detail-info{margin:28px 0 0;font-size:.9rem;line-height:1.4;white-space:pre-line;}
+    .detail-copy{margin:0;max-width:100%;font-size:.95rem;line-height:1.45;font-weight:500;white-space:pre-line;color:#111;}
+    .detail-video{width:100%;margin-top:48px;background:#000;aspect-ratio:16/9;overflow:hidden;}
+    .detail-video video{width:100%;height:100%;object-fit:cover;}
+    @media (max-width:860px){.detail-layout{grid-template-columns:1fr;row-gap:36px;align-items:start;}.detail-left{text-align:left;}}
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand-lockup" href="./index.html" data-text="home.title">Yuanlong Yu</a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a class="nav-link" href="./design.html" data-text="nav.work">Work</a>
+        <a class="nav-link" href="./about.html" data-text="nav.about">About</a>
+      </nav>
+    </header>
+    <main>
+      <section class="detail-block">
+        <div class="detail-image" data-asset-base="architecture-09" data-asset-alt="Architecture project 09"></div>
+        <div class="detail-layout">
+          <div class="detail-left">
+            <div class="detail-meta" data-text="project.09.meta">09</div>
+            <h1 class="detail-title" data-text="project.09.title">Luban Lock</h1>
+            <p class="detail-info" data-text="project.09.details">School work: DESIGN 6197</p>
+          </div>
+          <div class="detail-right">
+            <p class="detail-copy" data-text="project.09.copy">Placeholder text for project introduction, site, program, concept, material strategy, drawings, and other project notes.</p>
+          </div>
+        </div>
+        <div class="detail-video">
+          <video controls preload="metadata" poster="./assets/images/architecture-09-poster.png">
+            <source src="./assets/videos/architecture-09.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="./content/text.js"></script>
+  <script>
+    window.applySiteText();
+    const assetExtensions=["png","jpg","jpeg","webp","pdf"];
+    const container=document.querySelector("[data-asset-base]");
+    const base=container.dataset.assetBase;
+    const altText=container.dataset.assetAlt||base;
+    let current=0;
+    function renderAsset(extension){
+      if(extension==="pdf"){
+        const frame=document.createElement("iframe");
+        frame.src=`./assets/images/${base}.${extension}#view=FitH`;
+        frame.title=altText;
+        container.appendChild(frame);
+        return;
+      }
+      const image=document.createElement("img");
+      image.src=`./assets/images/${base}.${extension}`;
+      image.alt=altText;
+      container.appendChild(image);
+    }
+    function tryNext(){
+      if(current>=assetExtensions.length){
+        container.textContent="Missing Asset";
+        return;
+      }
+      const extension=assetExtensions[current++];
+      if(extension==="pdf"){
+        fetch(`./assets/images/${base}.${extension}`,{method:"HEAD"}).then((response)=>{
+          if(response.ok)renderAsset(extension);else tryNext();
+        }).catch(tryNext);
+        return;
+      }
+      const probe=new Image();
+      probe.onload=function(){renderAsset(extension);};
+      probe.onerror=tryNext;
+      probe.src=`./assets/images/${base}.${extension}`;
+    }
+    tryNext();
+  </script>
+</body>
+</html>
